@@ -5,11 +5,19 @@ inputs:
     description: 'submodules'
     required: false
     default: 'false'
-
+  lfs:
+    description: 'lfs'
+    required: false
+    defualt: 'false'
 
 runs:
   using: "composite"
   steps:
+    - name: disable lfs with namespace
+      if: ${{ contains(runner.name, 'nsc') && inputs.lfs == 'false' }}
+      run: |
+        echo "GIT_LFS_SKIP_SMUDGE=1" >> "$GITHUB_ENV"
+
     - name: checkout with namespace cache
       if: ${{ contains(runner.name, 'nsc') }} 
       uses: namespacelabs/nscloud-checkout-action@v1
