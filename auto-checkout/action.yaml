@@ -15,6 +15,7 @@ runs:
   steps:
     - name: disable lfs with namespace
       if: ${{ contains(runner.name, 'nsc') && inputs.lfs == 'false' }}
+      shell: bash
       run: |
         echo "GIT_LFS_SKIP_SMUDGE=1" >> "$GITHUB_ENV"
 
