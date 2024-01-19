@@ -21,7 +21,7 @@ runs:
 
     - name: checkout with namespace cache
       if: ${{ contains(runner.name, 'nsc') }} 
-      uses: namespacelabs/nscloud-checkout-action@v1
+      uses: namespacelabs/nscloud-checkout-action@v2
       with:
         submodules: ${{ inputs.submodules }}
 

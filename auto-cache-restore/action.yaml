@@ -4,8 +4,12 @@ inputs:
   path:
     description: 'path to cache'
     required: true
-    default: ''
-
+  key:
+    description: 'key'
+    required: true
+  restore-keys:
+    description: 'restore-keys'
+    required: true
 
 runs:
   using: "composite"
@@ -18,10 +22,13 @@ runs:
 
     - name: setup github cache
       if: ${{ !contains(runner.name, 'nsc') }}
-      uses: actions/cache@v2
+      uses: actions/cache/restore@v3
       with:
         path: ${{ inputs.path }}
-        key: scons-${{ runner.arch }}-${{ env.CACHE_COMMIT_DATE }}-${{ github.sha }}
-        restore-keys: |
-          scons-${{ runner.arch }}-${{ env.CACHE_COMMIT_DATE }}
-          scons-${{ runner.arch }}
+        key: ${{ inputs.key }}
+        restore-keys: ${{ inputs.restore-keys }}
+
+    # make the directory manually in case we didn't get a hit, so it doesn't fail on future steps
+    - id: scons-cache-setup
+      shell: bash
+      run: mkdir -p ${{ inputs.path }}
